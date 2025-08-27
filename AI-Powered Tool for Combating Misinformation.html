@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthGuard - AI-Powered Misinformation Detection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .result-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid;
+        }
+        .verified {
+            border-left-color: #10b981;
+            background: linear-gradient(90deg, #f0fdf4 0%, #ffffff 100%);
+        }
+        .misinformation {
+            border-left-color: #ef4444;
+            background: linear-gradient(90deg, #fef2f2 0%, #ffffff 100%);
+        }
+        .uncertain {
+            border-left-color: #f59e0b;
+            background: linear-gradient(90deg, #fffbeb 0%, #ffffff 100%);
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid orange;
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: orange }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-shield-check text-purple-600 text-2xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold">TruthGuard</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#verify" class="hover:text-purple-200 transition">Verify</a>
+                    <a href="#resources" class="hover:text-purple-200 transition">Resources</a>
+                    <a href="#about" class="hover:text-purple-200 transition">About</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Combat Misinformation with AI</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">
+                Verify information, detect false claims, and develop critical thinking skills with our advanced AI-powered platform.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="#verify" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition pulse">
+                    Start Verifying Now
+                </a>
+                <a href="#learn" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition">
+                    Learn How It Works
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Verification Tool -->
+    <section id="verify" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Information Verification Tool</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Enter any claim, news headline, or statement to check its credibility using our AI-powered analysis system.
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto bg-gray-50 rounded-xl p-6 shadow-lg">
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="claim">
+                        Enter the information you want to verify:
+                    </label>
+                    <textarea 
+                        id="claim" 
+                        class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        rows="4"
+                        placeholder="Paste news headline, social media post, or any claim here..."
+                    ></textarea>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">
+                        Additional context (optional):
+                    </label>
+                    <input 
+                        type="text" 
+                        class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        placeholder="Source, date, or additional details..."
+                    >
+                </div>
+
+                <button id="verify-btn" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition flex items-center justify-center">
+                    <i class="fas fa-search mr-2"></i>
+                    Analyze Information
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results" class="max-w-4xl mx-auto mt-8 hidden">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="p-6 border-b">
+                        <h3 class="text-xl font-semibold text-gray-800">Analysis Results</h3>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Credibility Score: <span id="score" class="text-green-600">92%</span></h4>
+                                <p class="text-gray-600">Highly Likely to be Accurate</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="flex items-center mb-2">
+                                    <i class="fas fa-check-circle text-blue-600 mr-2"></i>
+                                    <span class="font-semibold">Source Reliability</span>
+                                </div>
+                                <p class="text-sm text-gray-600">Multiple credible sources confirm this information</p>
+                            </div>
+                            <div class="bg-yellow-50 p-4 rounded-lg">
+                                <div class="flex items-center mb-2">
+                                    <i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i>
+                                    <span class="font-semibold">Fact-Checking</span>
+                                </div>
+                                <p class="text-sm text-gray-600">Verified by independent fact-checking organizations</p>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <div class="flex items-center mb-2">
+                                    <i class="fas fa-shield-alt text-green-600 mr-2"></i>
+                                    <span class="font-semibold">AI Confidence</span>
+                                </div>
+                                <p class="text-sm text-gray-600">High confidence in accuracy based on pattern analysis</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <h5 class="font-semibold mb-2">AI Analysis Summary:</h5>
+                            <p id="analysis-summary" class="text-gray-700">
+                                This information appears to be credible based on cross-referencing with multiple reliable sources. The claims are supported by evidence and consistent with established facts.
+                            </p>
+                        </div>
+
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h5 class="font-semibold mb-2">Recommended Actions:</h5>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1">
+                                <li>Share with confidence - this information is likely accurate</li>
+                                <li>Consider the original source for additional context</li>
+                                <li>Report any variations of this claim that seem suspicious</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Educational Resources -->
+    <section id="resources" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Learn to Spot Misinformation</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Develop critical thinking skills and learn how to identify false information with our educational resources.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <div class="h-48 bg-blue-100 flex items-center justify-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/78fcdad7-e96c-4cfb-95c0-ceb9e197149e.png" alt="Infographic showing common misinformation patterns and red flags to watch for" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentNode.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-xl mb-3">Red Flags of Misinformation</h3>
+                        <p class="text-gray-600 mb-4">Learn to identify common patterns and warning signs of false information.</p>
+                        <button class="text-purple-600 font-semibold hover:text-purple-700 transition">
+                            Learn More →
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <div class="h-48 bg-green-100 flex items-center justify-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f255e12d-1cc8-4459-92b4-df8149e3426e.png" alt="Step-by-step guide showing fact-checking process with verification tools and techniques" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentNode.style.background='linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-xl mb-3">Fact-Checking Guide</h3>
+                        <p class="text-gray-600 mb-4">Step-by-step process to verify information before sharing.</p>
+                        <button class="text-purple-600 font-semibold hover:text-purple-700 transition">
+                            Learn More →
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <div class="h-48 bg-purple-100 flex items-center justify-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/aee8f83c-0d2c-473a-94d3-6ef16964a30e.png" alt="Visual representation of media literacy concepts with icons for source evaluation and critical thinking" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentNode.style.background='linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-xl mb-3">Media Literacy Toolkit</h3>
+                        <p class="text-gray-600 mb-4">Resources to improve your critical thinking and media consumption habits.</p>
+                        <button class="text-purple-600 font-semibold hover:text-purple-700 transition">
+                            Learn More →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="learn" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">How TruthGuard Works</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Our AI-powered system uses advanced algorithms to analyze information and provide credibility assessments.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-robot text-blue-600 text-3xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-xl mb-3">AI Analysis</h3>
+                    <p class="text-gray-600">
+                        Advanced machine learning models analyze patterns, sources, and content to detect misinformation signals.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-database text-green-600 text-3xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-xl mb-3">Source Verification</h3>
+                    <p class="text-gray-600">
+                        Cross-references information with trusted databases and fact-checking organizations worldwide.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-purple-600 text-3xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-xl mb-3">Pattern Recognition</h3>
+                    <p class="text-gray-600">
+                        Identifies common misinformation patterns and manipulative techniques used in false narratives.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="font-semibold mb-4">TruthGuard</h4>
+                    <p class="text-gray-400">Fighting misinformation with AI-powered verification tools and educational resources.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#verify" class="text-gray-400 hover:text-white transition">Verify Information</a></li>
+                        <li><a href="#resources" class="text-gray-400 hover:text-white transition">Resources</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Fact-Checking Guide</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Media Literacy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Research Papers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2024 TruthGuard. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const verifyBtn = document.getElementById('verify-btn');
+            const results = document.getElementById('results');
+            const claimInput = document.getElementById('claim');
+            const scoreElement = document.getElementById('score');
+            const analysisSummary = document.getElementById('analysis-summary');
+
+            // Sample analysis responses for demonstration
+            const sampleResponses = [
+                {
+                    score: 92,
+                    summary: "This information appears to be credible based on cross-referencing with multiple reliable sources. The claims are supported by evidence and consistent with established facts.",
+                    type: "verified"
+                },
+                {
+                    score: 35,
+                    summary: "This claim shows several characteristics of misinformation. It originates from questionable sources and contains elements that contradict verified information from reputable organizations.",
+                    type: "misinformation"
+                },
+                {
+                    score: 65,
+                    summary: "This information has mixed credibility. Some aspects are supported by evidence, while others require further verification. Consider checking with additional reliable sources.",
+                    type: "uncertain"
+                }
+            ];
+
+            verifyBtn.addEventListener('click', function() {
+                const claim = claimInput.value.trim();
+                
+                if (claim.length === 0) {
+                    alert('Please enter some information to verify.');
+                    return;
+                }
+
+                // Show loading state
+                verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Analyzing...';
+                verifyBtn.disabled = true;
+
+                // Simulate AI processing time
+                setTimeout(() => {
+                    // Randomly select a sample response for demonstration
+                    const randomResponse = sampleResponses[Math.floor(Math.random() * sampleResponses.length)];
+                    
+                    // Update results
+                    scoreElement.textContent = randomResponse.score + '%';
+                    scoreElement.className = randomResponse.score > 70 ? 'text-green-600' : 
+                                           randomResponse.score > 40 ? 'text-yellow-600' : 'text-red-600';
+                    analysisSummary.textContent = randomResponse.summary;
+                    
+                    // Show results
+                    results.classList.remove('hidden');
+                    
+                    // Reset button
+                    verifyBtn.innerHTML = '<i class="fas fa-search mr-2"></i> Analyze Information';
+                    verifyBtn.disabled = false;
+                }, 2000);
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
